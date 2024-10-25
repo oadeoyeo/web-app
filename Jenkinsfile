@@ -5,18 +5,22 @@ pipeline {
         stage('Clone github Repo') {
             steps {
                 sh '''
-                git clone 
+                git clone https://github.com/oadeoyeo/web-app.git
                 '''
             }
         }
-        stage('Example SSH Username with private key') {
-            environment {
-                SSH_CREDS = credentials('my-predefined-ssh-creds')
-            }
+        stage('Build docker image') {
             steps {
-                sh 'echo "SSH private key is located at $SSH_CREDS"'
-                sh 'echo "SSH user is $SSH_CREDS_USR"'
-                sh 'echo "SSH passphrase is $SSH_CREDS_PSW"'
+                sh '''
+                docker build -t oxer-html:v01 .
+                '''
+            }
+        }
+        stage('Push image to Dockerhub') {
+            steps {
+                sh '''
+                docker push oxer-html:v01
+                '''
             }
         }
     }
