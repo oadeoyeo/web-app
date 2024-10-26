@@ -10,14 +10,14 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                  //  withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-                        dir('HTML-APP') {
+                    withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        dir('html-app') {
                             sh "docker build -t oxer-html ."
-                        }                    
-                  //  }
+                        }
+                    }
                 }
             }
-        }
+
         stage('Push image to Dockerhub') {
             steps {
                 script {
