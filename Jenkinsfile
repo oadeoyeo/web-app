@@ -12,7 +12,7 @@ pipeline {
                 script {
                   //  withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         dir('HTML-APP') {
-                            sh "docker build -f ./Dockerfile -t oxer-html ."
+                            sh "docker build -t oxer-html ."
                         }                    
                   //  }
                 }
