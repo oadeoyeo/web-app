@@ -4,23 +4,30 @@ pipeline {
     stages {
         stage('Clone github Repo') {
             steps {
-                sh '''
-                git clone https://github.com/oadeoyeo/web-app.git
-                '''
+                git branch: 'main', credentialsId: 'git-creds', url: 'https://github.com/oadeoyeo/web-app.git'
             }
         }
         stage('Build docker image') {
             steps {
-                sh '''
-                docker build -t oxer-html:v01 .
-                '''
+                script {
+                    withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    sh '''
+                    cd ${WORKSPACE}/HTML-APP
+                    docker build -t oxer-html .
+                    '''
+                    }
+                }
             }
         }
         stage('Push image to Dockerhub') {
             steps {
-                sh '''
-                docker push oxer-html:v01
-                '''
+                script {
+                    withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws-creds', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                   sh '''
+                    docker push oadeoyeo/oxer-html:001
+                    '''
+                    }
+                }
             }
         }
     }
